@@ -28,8 +28,9 @@
     (getContentType [this] (-> ring-response :headers :content-type))))
 
 (defn ^{:newrelic-method-annotations {Trace {:dispatcher true}}} tracerAsync
-  "Named tracerAsync since the new relic extension expects java compliant names. Simple async function that sets
-  request/response data on new relic tx. No dive down into mysql queries, etc yet."
+  "Named tracerAsync since the new relic extension expects java compliant names.
+   Simple async function that sets request/response data on new relic tx.
+   No dive down into mysql queries, etc yet."
   [handler> request]
   (go-try
     (let [response (<? (handler> request))

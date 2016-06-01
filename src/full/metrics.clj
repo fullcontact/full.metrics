@@ -14,7 +14,6 @@
 
 ;;; CONFIG ;;;
 
-
 (def riemann-config (opt :riemann :default nil))
 (def protocol (opt [:riemann :protocol] :default "udp"))
 (def batch-size (opt [:riemann :batch-size] :default nil))
@@ -42,18 +41,18 @@
         (rmn/batch-client rclient batch-size))
       rclient)))
 
-(def client (delay (get-client {:protocol @protocol 
-                                :config @riemann-config 
+(def client (delay (get-client {:protocol @protocol
+                                :config @riemann-config
                                 :batch-size @batch-size})))
 
-;;; EVENT PUT ;;;
 
+;;; EVENT PUT ;;;
 
 (defn normalize [event]
   (cond-> event
           ; if event is string convert it to {:service event}
           (string? event) (->> (hash-map :service))
-          @tags (assoc :tags (concat (or (:tags event) []) @tags))))
+          @tags (assoc :tags (concat (:tags event []) @tags))))
 
 (defn send-event [event]
   (when @riemann-config
@@ -122,9 +121,7 @@
            fail# (instance? Throwable res#)]
        (track (assoc event# :metric (ellapsed-time start-time#)
                             :tags (conj (or (:tags event#) []) "timeit")
-                            :state (if fail#
-                                     "critical"
-                                     "ok")
+                            :state (if fail# "critical" "ok")
                             :description (when fail# (str res#))))
        (gauge g# (update-timeit-gauge (:service event#) dec))
        (if fail#
@@ -142,8 +139,7 @@
 (defn increment
   [event]
   (-> (wrap-event event)
-      (assoc :metric 1
-             :tags ["increment"])
+      (assoc :metric 1 :tags ["increment"])
       (track)))
 
 (defn wrap-timeit
@@ -155,11 +151,11 @@
     ([a] (timeit event (f a)))
     ([a b] (timeit event (f a b)))
     ([a b c] (timeit event (f a b c)))
-    ([a b c d & more] (timeit event (apply f (cons a (cons b (cons c (cons d more)))))))))
+    ([a b c d & more]
+      (timeit event (apply f (cons a (cons b (cons c (cons d more)))))))))
 
 
 ;;; EVENT GET ;;;
-
 
 (defn query
   "Query the server for events in the index. Returns a list of events."
