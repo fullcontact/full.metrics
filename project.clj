@@ -10,7 +10,7 @@
                                                                org.slf4j/slf4j-api]]
                  [com.climate/clj-newrelic "0.2.1"]
                  [fullcontact/full.async "0.9.0"]
-                 [fullcontact/full.core "0.10.0"]]
+                 [fullcontact/full.core "0.10.1"]]
   :aot [full.metrics]  ; clojure new relic extension doesn't work when AOT'ed.
   :plugins [[lein-midje "3.1.3"]]
   :release-tasks [["vcs" "assert-committed"]
