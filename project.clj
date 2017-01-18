@@ -1,4 +1,4 @@
-(defproject fullcontact/full.metrics "0.10.4-SNAPSHOT"
+(defproject fullcontact/full.metrics "0.11.0-SNAPSHOT"
   :description "Clojure application metrics and monitoring sugar"
   :url "https://github.com/fullcontact/full.metrics"
   :license {:name "Eclipse Public License - v 1.0"
@@ -10,7 +10,7 @@
                                                               org.slf4j/slf4j-api
                                                               com.google.protobuf/protobuf-java]]
                  [com.google.protobuf/protobuf-java "3.1.0"]
-                 [com.climate/clj-newrelic "0.2.1"]
+                 [com.timgroup/java-statsd-client "3.0.1"]
                  [fullcontact/full.async "0.9.0"]
                  [fullcontact/full.core "0.10.2" :exclusions [org.clojure/clojurescript]]]
   :aot [full.metrics]  ; clojure new relic extension doesn't work when AOT'ed.
