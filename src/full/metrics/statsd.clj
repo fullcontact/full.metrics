@@ -1,5 +1,6 @@
 (ns full.metrics.statsd
-  (:require [full.core.config :refer [opt]])
+  (:require [full.core.config :refer [opt]]
+            [full.core.log :as log])
   (:import (com.timgroup.statsd NonBlockingStatsDClient NoOpStatsDClient)))
 
 (def host (opt [:statsd :host] :default nil))
@@ -9,7 +10,9 @@
 (defn get-client
   [prefix host port]
   (if (and prefix host port)
-    (NonBlockingStatsDClient. prefix host port)
+    (do
+      (log/info "Initializing" prefix "StatsD Client to" host "over" port)
+      (NonBlockingStatsDClient. prefix host port))
     (NoOpStatsDClient.)))
 
 (def client
