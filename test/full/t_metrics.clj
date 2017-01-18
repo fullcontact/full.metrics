@@ -2,7 +2,8 @@
   (:require [midje.sweet :refer :all]
             [full.metrics.riemann :as rmn]
             [full.metrics.statsd :as statsd]
-            [full.metrics :refer :all]))
+            [full.metrics :refer :all]
+            [full.async :refer [<??]]))
 
 (facts
   "Test timeit body evaluated with no configuration."
@@ -20,3 +21,14 @@
           (rmn/get-client {:protocol "udp" :config {:host "127.0.0.1"}})
           (statsd/get-client "prefix" "localhost" 1234)
           (timeit "k" (inc 0))) => 1))
+
+(go-try-timeit "k")
+
+(facts
+  "Test go-try-timeit body evaluated with riemann and statsd configuration."
+  (fact (do
+          (rmn/get-client {:protocol "udp" :config {:host "127.0.0.1"}})
+          (statsd/get-client "prefix" "localhost" 1234)
+          (<?? (go-try-timeit "k"
+                              (inc 0)
+                              (inc 0)))) => 1))

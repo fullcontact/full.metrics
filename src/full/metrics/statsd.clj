@@ -51,4 +51,4 @@
            (throw error#))
          (do (increment success#)
              result#)))
-     ~@body))
+     (do ~@body)))
