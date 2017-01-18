@@ -1,13 +1,22 @@
 (ns full.t-metrics
   (:require [midje.sweet :refer :all]
+            [full.metrics.riemann :as rmn]
+            [full.metrics.statsd :as statsd]
             [full.metrics :refer :all]))
 
 (facts
-  "Test batch client returned when size specified."
-  (fact (-> (get-client {:protocol "udp" :config {:host "127.0.0.1"} :batch-size 10})
-            (type)
-            (str)) => "class com.aphyr.riemann.client.RiemannBatchClient")
+  "Test timeit body evaluated with no configuration."
+  (fact (timeit "k" (inc 0)) => 1))
 
-  (fact (-> (get-client {:protocol "udp" :config {:host "127.0.0.1"}})
-            (type)
-            (str)) => "class com.aphyr.riemann.client.RiemannClient"))
+(facts
+  "Test timeit body evaluated with riemann configuration."
+  (fact (do
+          (rmn/get-client {:protocol "udp" :config {:host "127.0.0.1"}})
+          (timeit "k" (inc 0))) => 1))
+
+(facts
+  "Test timeit body evaluated with riemann and statsd configuration."
+  (fact (do
+          (rmn/get-client {:protocol "udp" :config {:host "127.0.0.1"}})
+          (statsd/get-client "prefix" "localhost" 1234)
+          (timeit "k" (inc 0))) => 1))
