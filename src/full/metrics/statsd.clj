@@ -36,7 +36,7 @@
 
 (defmacro timeit
   [k & body]
-  `(if (and @prefix @host @port)
+  `(if @client
      (let [start# (System/currentTimeMillis)
            result# (try ~@body (catch Throwable t# t#))
            end# (System/currentTimeMillis)
@@ -48,7 +48,7 @@
        (if error#
          (do
            (increment fail#)
-           (throw error#))
+           (throw result#))
          (do (increment success#)
              result#)))
      (do ~@body)))
