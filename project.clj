@@ -10,7 +10,7 @@
                                                               org.slf4j/slf4j-api
                                                               com.google.protobuf/protobuf-java]]
                  [com.google.protobuf/protobuf-java "3.1.0"]
-                 [com.timgroup/java-statsd-client "3.0.1"]
+                 [clj-statsd "0.4.0"]
                  [com.climate/clj-newrelic "0.2.1"]
                  [fullcontact/full.async "0.9.0"]
                  [fullcontact/full.core "0.10.2" :exclusions [org.clojure/clojurescript]]]
