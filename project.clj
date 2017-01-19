@@ -1,4 +1,4 @@
-(defproject fullcontact/full.metrics "0.11.3-SNAPSHOT"
+(defproject fullcontact/full.metrics "0.11.3"
   :description "Clojure application metrics and monitoring sugar"
   :url "https://github.com/fullcontact/full.metrics"
   :license {:name "Eclipse Public License - v 1.0"
